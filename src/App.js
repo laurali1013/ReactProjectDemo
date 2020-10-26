@@ -1,19 +1,57 @@
 import React, { Component } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
 import './App.less';
 
-import Login from './login/login';
-import Admin from './admin/admin'
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.selectRef = React.createRef();
+  }
 
-  render() { 
+  state = {
+    count: 0,
+  };
+  increment = () => {
+    let { count } = this.state;
+    let { value } = this.selectRef.current;
+    this.setState({ count:(count+value*1)})
+  };
+  decrement = () => {
+    let { count } = this.state;
+    let { value } = this.selectRef.current;
+    this.setState({ count: count - value * 1 });
+  };
+  incrementIfOdd = () => {
+    let { count } = this.state;
+    let { value } = this.selectRef.current;
+    if (count % 2 === 0) {
+      this.setState({ count: count + value * 1 });
+    }
+  };
+  incrementAsync = () => {
+    let { count } = this.state;
+    let { value } = this.selectRef.current;
+    setTimeout(() => {
+     this.setState({ count: count + value * 1 }); 
+    },2000)
+  };
+
+  render() {
+    let { count } = this.state;
     return (
-      <Switch>
-        <Route path='/login' component={Login}/>
-        <Route path='/' component={Admin} />
-        <Redirect to='/login'/>
-      </Switch>
+      <div>
+        <h3>当前计数为{count}</h3>
+        <select ref={this.selectRef}>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+        &nbsp;
+        <button onClick={this.increment}>+</button>&nbsp;
+        <button onClick={this.decrement}>-</button>&nbsp;
+        <button onClick={this.incrementIfOdd}>increment if odd</button>&nbsp;
+        <button onClick={this.incrementAsync}>increment if async</button>
+      </div>
     );
   }
 }
